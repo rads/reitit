@@ -2,8 +2,9 @@
   (:refer-clojure :exclude [compile])
   (:require [clojure.string :as str]
             [reitit.exception :as ex])
-  #?(:clj (:import (java.net URLDecoder)
-                   [reitit Trie Trie$Match Trie$Matcher])))
+  #?@(:bb [(:import (java.net URLDecoder))]
+      :clj [(:import (java.net URLDecoder)
+                     [reitit Trie Trie$Match Trie$Matcher])]))
 
 (defn ^:no-doc into-set [x]
   (cond
@@ -281,7 +282,8 @@
         (if-let [match (match matcher 0 (count path) path)]
           (->Match (:params match) (:data match)))))))
 
-#?(:clj
+#?(:bb nil
+   :clj
    (defn java-trie-compiler []
      (reify
        TrieCompiler
@@ -309,7 +311,8 @@
 (defn- map-parameters [keys]
   (zipmap keys (repeat nil)))
 
-#?(:clj
+#?(:bb nil
+   :clj
    (def record-parameters
      "Memoized function to transform parameters into runtime generated Record."
      (memoize
@@ -340,7 +343,8 @@
 (defn compiler
   "Returns a default [[TrieCompiler]]."
   []
-  #?(:cljs (clojure-trie-compiler)
+  #?(:bb (clojure-trie-compiler)
+     :cljs (clojure-trie-compiler)
      :clj  (java-trie-compiler)))
 
 (defn compile

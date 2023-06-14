@@ -1,6 +1,7 @@
 (ns reitit.ring
   (:require [clojure.string :as str]
-            #?@(:clj [[ring.util.mime-type :as mime-type]
+            #?@(:bb []
+                :clj [[ring.util.mime-type :as mime-type]
                       [ring.util.response :as response]])
             [reitit.core :as r]
             [reitit.coercion :as coercion]
@@ -206,7 +207,8 @@
           (respond (error-handler request)))
         (respond (not-found request)))))))
 
-#?(:clj
+#?(:bb nil
+   :clj
    ;; TODO: optimize for perf
    ;; TODO: ring.middleware.not-modified/wrap-not-modified
    ;; TODO: ring.middleware.head/wrap-head
@@ -255,7 +257,8 @@
                              (not-found-handler request)))))]
        (create handler))))
 
-#?(:clj
+#?(:bb nil
+   :clj
    (defn create-resource-handler
      "A ring handler for serving classpath resources, configured via options:
 
@@ -272,7 +275,8 @@
      ([opts]
       (-create-file-or-resource-handler response/resource-response opts))))
 
-#?(:clj
+#?(:bb nil
+   :clj
    (defn create-file-handler
      "A ring handler for serving file resources, configured via options:
 
