@@ -190,15 +190,18 @@
        {:path-params path-params, :required required}))))
 
 (defn fast-assoc
-  #?@(:clj  [[^clojure.lang.Associative a k v] (.assoc a k v)]
+  #?@(:bb   [[a k v] (assoc a k v)]
+      :clj  [[^clojure.lang.Associative a k v] (.assoc a k v)]
       :cljs [[a k v] (assoc a k v)]))
 
 (defn fast-map [m]
-  #?(:clj  (let [m (or m {})] (HashMap. ^Map m))
+  #?(:bb   m
+     :clj  (let [m (or m {})] (HashMap. ^Map m))
      :cljs m))
 
 (defn fast-get
-  #?@(:clj  [[^HashMap m k] (.get m k)]
+  #?@(:bb   [[m k] (m k)]
+      :clj  [[^HashMap m k] (.get m k)]
       :cljs [[m k] (m k)]))
 
 (defn strip-nils [m]
